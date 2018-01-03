@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Tree Example</title>
+
+    <style>
+	
+	.node {
+		cursor: pointer;
+	}
+
+	.node circle {
+	  fill: #fff;
+	  stroke: steelblue;
+	  stroke-width: 3px;
+	}
+
+	.node text {
+	  font: 12px sans-serif;
+	}
+
+	.link {
+	  fill: none;
+	  stroke: #ccc;
+	  stroke-width: 2px;
+	}
+	
+    </style>
+
+  </head>
+
+  <body>
+
+<!-- load the d3.js library -->	
+<script src="http://d3js.org/d3.v3.min.js"></script>
+	
+<script>
+
+var treeData = [
+  {
+    "name": "Gesture control",
+    "parent": "null",
+    "children": [
+      {
+        "name": "Pick and drop",
+        "parent": "Gesture control",
+        "children": [
+          {
+            "name": "Lift and drop",
+            "parent": "Pick and drop",
+            "children": [
+	            {
+            		"name": "Airlift",
+           		 	"parent": "Pick and drop",
+	            }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Throw",
+        "parent": "Gesture control",
+        "children": [
+        	{
+        		"name": "Throwing",
+		        "parent": "Throw",
+		        "children": [
+		        	{
+		        		"name": "Interactive Wall",
+				        "parent": "Throwing",
+				        "children": [
+				        	{
+				        		"name": "Shuffle",
+				        		"parent": "Interactive Wall",
+				        	},
+				        	{
+				        		"name": "Throw",
+				        		"parent": "Interactive Wall",
+				        	},
+				        	{
+				        		"name": "Take it",
+				        		"parent": "Interactive Wall",
+				        	}
+				        ]
+		        	},
+		        	{
+		        		"name": "MobiComics",
+				        "parent": "Throwing",
+				        "children": [
+				        	{
+				        		"name": "Throwing",
+				        		"parent": "MobiComics",
+				        	},
+				        	{
+				        		"name": "Send to me",
+				        		"parent": "MobiComics",
+				        	},
+				        	{
+				        		"name": "Retrieving",
+				        		"parent": "MobiComics",
+				        	},
+				        	{
+				        		"name": "Voting",
+				        		"parent": "MobiComics",
+				        	}
+				        ]
+		        	},
+		        	{
+		        		"name": "Chucking",
+				        "parent": "Throwing"
+		        	},
+		        ]
+        	},
+        	{
+        		"name": "Shuffling",
+		        "parent": "Throw",
+		        "children": [
+		        	{
+		        		"name": "Interactive Wall",
+		        		"parent": "Shuffling",
+		        		"children": [
+				        	{
+				        		"name": "Shuffle",
+				        		"parent": "Interactive Wall",
+				        	},
+				        	{
+				        		"name": "Throw",
+				        		"parent": "Interactive Wall",
+				        	},
+				        	{
+				        		"name": "Take it",
+				        		"parent": "Interactive Wall",
+				        	}
+				        ]
+		        	}
+		        ]
+        	}
+        ]
+      },
+      {
+        "name": "Cross device dragging",
+        "parent": "Gesture control",
+        "children": [
+        	{
+        		"name": "Drag and drop",
+		        "parent": "Cross device dragging",
+		        "children": [
+		        	{
+		        		"name": "Hyperdrag",
+				        "parent": "Drag and drop"
+		        	},
+		        	{
+		        		"name": "Cross device drag and drop",
+				        "parent": "Drag and drop"
+		        	},
+		        	{
+		        		"name": "MobiES",
+				        "parent": "Drag and drop"
+		        	},
+		        	{
+		        		"name": "The Conduit",
+				        "parent": "Drag and drop"
+		        	}
+		        ]
+        	}
+        ]
+      },
+      {
+        "name": "Display grouping",
+        "parent": "Gesture Control",
+        "children": [
+        	{
+        		"name": "Bumping",
+		        "parent": "Display grouping",
+		        "children": [
+		        	{
+		        		"name": "Synchronous Gestures",
+				        "parent": "Bumping"
+		        	},
+		        	{
+		        		"name": "Paper video",
+				        "parent": "Bumping",
+				        "children": [
+				        	{
+				        		"name": "Spatial location input",
+				        		"parent": "Paper video"
+				        	},
+				        	{
+				        		"name": "Gestures",
+				        		"parent": "Paper video",
+				        		 "children": [
+				        		 	{
+				        		 		"name": "Touch",
+				        				"parent": "Gestures"
+				        		 	},
+				        		 	{
+				        		 		"name": "Shake",
+				        				"parent": "Gestures"
+				        		 	},
+				        		 	{
+				        		 		"name": "Quick upward move",
+				        				"parent": "Gestures"
+				        		 	}
+				        		 ]
+				        	},
+				        	{
+				        		"name": "Display proximity input",
+				        		"parent": "Paper video",
+				        		 "children": [
+				        		 	{
+				        		 		"name": "Pile",
+				        				"parent": "Display proximity input"
+				        		 	},
+				        		 	{
+				        		 		"name": "Side as pointer",
+				        				"parent": "Display proximity input"
+				        		 	},
+				        		 	{
+				        		 		"name": "Corner as pointer",
+				        				"parent": "Display proximity input"
+				        		 	}
+				        		 ]
+				        	}
+				        ]
+		        	}
+		        ]
+        	},
+        	// {
+        	// 	"name": "Proxmity",
+		       //  "parent": "Display grouping",
+		       //  "children": [
+		       //  	{
+	        // 			"name": "Codex",
+				     //    "parent": "Proxmity",
+				     //    "children": [
+				     //    	{
+				     //    		"name": "Concave",
+						   //      "parent": "Codex",
+						   //      "children": [
+						   //      	{
+						   //      		"name": "Closed book",
+								 //        "parent": "Concave"
+						   //      	},
+						   //      	{
+						   //      		"name": "Book in hand",
+								 //        "parent": "Concave"
+						   //      	},
+						   //      	{
+						   //      		"name": "Standing book",
+								 //        "parent": "Concave"
+						   //      	},
+						   //      	{
+						   //      		"name": "Lectern",
+								 //        "parent": "Concave"
+						   //      	},
+						   //      	{
+						   //      		"name": "Back to back",
+								 //        "parent": "Concave"
+						   //      	},
+						   //      	{
+						   //      		"name": "Laptop",
+								 //        "parent": "Concave"
+						   //      	}
+						   //      ]
+				     //    	},
+				     //    	{
+				     //    		"name": "Neutral",
+						   //      "parent": "Codex",
+						   //      "children": [
+						   //      	{
+						   //      		"name": "Flat",
+								 //        "parent": "Neutral"
+						   //      	},
+						   //      ]
+						   //  },
+				     //    	{
+				     //    		"name": "Convex",
+						   //      "parent": "Codex",
+						   //      "children": [
+						   //      	{
+						   //      		"name": "Corner to corner",
+								 //        "parent": "Neutral"
+						   //      	},
+						   //      	{
+						   //      		"name": "Face to face",
+								 //        "parent": "Neutral"
+						   //      	},
+						   //      	{
+						   //      		"name": "Battleship",
+								 //        "parent": "Neutral"
+						   //      	}
+						   //      ]
+						   //  }	
+				     //    ]
+		       //  	}
+		       //  ]
+        	// },
+        	{
+        		"name": "Pinch",
+		        "parent": "Display grouping",
+		        "children": [
+		        	{
+		        		"name": "MovieTile",
+				        "parent": "Pinch",
+				        "children": [
+				        	{
+				        		"name": "Three-dimensional",
+						        "parent": "MovieTile"
+				        	},
+				        	{
+				        		"name": "Folding screen",
+						        "parent": "MovieTile"
+				        	},
+				        	{
+				        		"name": "Combination of multiple movies",
+						        "parent": "MovieTile"
+				        	}
+				        ]
+		        	}
+		        ]
+        	}
+        ]
+      },
+      {
+        "name": "Gravity like",
+        "parent": "Gesture control",
+        "children": [
+        	{
+        		"name": "Drag and pop",
+		        "parent": "Gravity like"
+        	},
+        	{
+        		"name": "Drag and pick",
+		        "parent": "Gravity like"
+		    }
+        ]
+      }
+    ]
+  }
+];
+
+
+// ************** Generate the tree diagram	 *****************
+// var margin = {top: 40, right: 120, bottom: 20, left: 120},
+// 	width = 1280 - margin.right - margin.left,
+// 	height = 1000 - margin.top - margin.bottom;
+	
+// var i = 0;
+
+// var tree = d3.layout.tree()
+// 	.size([height, width]);
+
+// var diagonal = d3.svg.diagonal()
+// 	.projection(function(d) { return [d.x, d.y]; });
+
+// var svg = d3.select("body").append("svg")
+// 	.attr("width", width + margin.right + margin.left)
+// 	.attr("height", height + margin.top + margin.bottom)
+//   .append("g")
+// 	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+// root = treeData[0];
+  
+// update(root);
+
+// function update(source) {
+
+//   // Compute the new tree layout.
+//   var nodes = tree.nodes(root).reverse(),
+// 	  links = tree.links(nodes);
+
+//   // Normalize for fixed-depth.
+//   nodes.forEach(function(d) { d.y = d.depth * 100; });
+
+//   // Declare the nodes…
+//   var node = svg.selectAll("g.node")
+// 	  .data(nodes, function(d) { return d.id || (d.id = ++i); });
+
+//   // Enter the nodes.
+//   var nodeEnter = node.enter().append("g")
+// 	  .attr("class", "node")
+// 	  .attr("transform", function(d) { 
+// 		  return "translate(" + d.x + "," + d.y + ")"; });
+
+//   nodeEnter.append("circle")
+// 	  .attr("r", 10)
+// 	  .style("fill", "#fff");
+
+// nodeEnter.append("text")
+//    .attr("x", function(d) { 
+//     return d.children || d._children ? -13 : 13; })
+//    .attr("dy", ".35em")
+//    .attr("text-anchor", function(d) { 
+//     return d.children || d._children ? "end" : "start"; })
+//    .text(function(d) { return d.name; })
+//    .style("fill-opacity", 1);
+//   // nodeEnter.append("text")
+// 	 //  .attr("y", function(d) { 
+// 		//   return d.children || d._children ? -18 : 18; })
+// 	 //  .attr("dy", ".35em")
+// 	 //  .attr("text-anchor", "middle")
+// 	 //  .text(function(d) { return d.name; })
+// 	 //  .style("fill-opacity", 1);
+
+//   // Declare the links…
+//   var link = svg.selectAll("path.link")
+// 	  .data(links, function(d) { return d.target.id; });
+
+//   // Enter the links.
+//   link.enter().insert("path", "g")
+// 	  .attr("class", "link")
+// 	  .attr("d", diagonal);
+
+// }
+// // ************** Generate the tree diagram	 *****************
+
+var margin = {top: 20, right: 120, bottom: 20, left: 120},
+	width = 1280 - margin.right - margin.left,
+	height = 500 - margin.top - margin.bottom;
+	
+var i = 0,
+	duration = 750,
+	root;
+
+var tree = d3.layout.tree()
+	.size([height, width]);
+
+var diagonal = d3.svg.diagonal()
+	.projection(function(d) { return [d.y, d.x]; });
+
+var svg = d3.select("body").append("svg")
+	.attr("width", width + margin.right + margin.left)
+	.attr("height", height + margin.top + margin.bottom)
+  .append("g")
+	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+root = treeData[0];
+root.x0 = height / 2;
+root.y0 = 0;
+  
+update(root);
+
+d3.select(self.frameElement).style("height", "500px");
+
+function update(source) {
+
+  // Compute the new tree layout.
+  var nodes = tree.nodes(root).reverse(),
+	  links = tree.links(nodes);
+
+  // Normalize for fixed-depth.
+  nodes.forEach(function(d) { d.y = d.depth * 180; });
+
+  // Update the nodes…
+  var node = svg.selectAll("g.node")
+	  .data(nodes, function(d) { return d.id || (d.id = ++i); });
+
+  // Enter any new nodes at the parent's previous position.
+  var nodeEnter = node.enter().append("g")
+	  .attr("class", "node")
+	  .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
+	  .on("click", click);
+
+  nodeEnter.append("circle")
+	  .attr("r", 1e-6)
+	  .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+
+  nodeEnter.append("text")
+	  .attr("x", function(d) { return d.children || d._children ? -13 : 13; })
+	  .attr("dy", ".35em")
+	  .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
+	  .text(function(d) { return d.name; })
+	  .style("fill-opacity", 1e-6);
+
+  // Transition nodes to their new position.
+  var nodeUpdate = node.transition()
+	  .duration(duration)
+	  .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+
+  nodeUpdate.select("circle")
+	  .attr("r", 10)
+	  .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+
+  nodeUpdate.select("text")
+	  .style("fill-opacity", 1);
+
+  // Transition exiting nodes to the parent's new position.
+  var nodeExit = node.exit().transition()
+	  .duration(duration)
+	  .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
+	  .remove();
+
+  nodeExit.select("circle")
+	  .attr("r", 1e-6);
+
+  nodeExit.select("text")
+	  .style("fill-opacity", 1e-6);
+
+  // Update the links…
+  var link = svg.selectAll("path.link")
+	  .data(links, function(d) { return d.target.id; });
+
+  // Enter any new links at the parent's previous position.
+  link.enter().insert("path", "g")
+	  .attr("class", "link")
+	  .attr("d", function(d) {
+		var o = {x: source.x0, y: source.y0};
+		return diagonal({source: o, target: o});
+	  });
+
+  // Transition links to their new position.
+  link.transition()
+	  .duration(duration)
+	  .attr("d", diagonal);
+
+  // Transition exiting nodes to the parent's new position.
+  link.exit().transition()
+	  .duration(duration)
+	  .attr("d", function(d) {
+		var o = {x: source.x, y: source.y};
+		return diagonal({source: o, target: o});
+	  })
+	  .remove();
+
+  // Stash the old positions for transition.
+  nodes.forEach(function(d) {
+	d.x0 = d.x;
+	d.y0 = d.y;
+  });
+}
+
+// Toggle children on click.
+function click(d) {
+  if (d.children) {
+	d._children = d.children;
+	d.children = null;
+  } else {
+	d.children = d._children;
+	d._children = null;
+  }
+  update(d);
+}
+
+</script>
+	
+  </body>
+</html>
